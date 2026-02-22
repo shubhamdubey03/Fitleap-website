@@ -6,15 +6,6 @@ const CoachRequests = () => {
     const [approvalLoading, setApprovalLoading] = useState(null); // ID of coach being approved
     const [selectedDoc, setSelectedDoc] = useState(null); // { url, type, title }
 
-<<<<<<< HEAD
-    const fetchPendingCoaches = async () => {
-        try {
-            const response = await fetch('http://localhost:5000/api/admin/pending-coaches');
-            const data = await response.json();
-            if (response.ok) {
-                console.log('Fetched Coaches Data:', data); // Debugging Log
-                setCoaches(data);
-=======
     const fetchCoaches = async () => {
         try {
             const response = await fetch('http://localhost:5000/api/admin/coaches');
@@ -24,7 +15,6 @@ const CoachRequests = () => {
                 // Filter to show only pending coaches
                 const pendingCoaches = data.filter(coach => !coach.is_approved);
                 setCoaches(pendingCoaches);
->>>>>>> master
             } else {
                 console.error('Failed to fetch coaches:', data.message);
             }
@@ -36,11 +26,7 @@ const CoachRequests = () => {
     };
 
     useEffect(() => {
-<<<<<<< HEAD
-        fetchPendingCoaches();
-=======
         fetchCoaches();
->>>>>>> master
     }, []);
 
     const handleApprove = async (coachId) => {
@@ -73,26 +59,15 @@ const CoachRequests = () => {
         setSelectedDoc({ url, title });
     };
 
-<<<<<<< HEAD
-    if (loading) return <div className="loading">Loading requests...</div>;
-=======
     if (loading) return <div className="loading">Loading coaches...</div>;
->>>>>>> master
 
     return (
         <div className="content-section">
             <div className="section-header">
-<<<<<<< HEAD
-                <h2>Coach Approval Requests</h2>
-            </div>
-            {coaches.length === 0 ? (
-                <div className="empty-state">No pending requests</div>
-=======
                 <h2>Registered Coaches</h2>
             </div>
             {coaches.length === 0 ? (
                 <div className="empty-state">No coaches found</div>
->>>>>>> master
             ) : (
                 <div className="table-container">
                     <table>
@@ -150,15 +125,6 @@ const CoachRequests = () => {
                                         </div>
                                     </td>
                                     <td>
-<<<<<<< HEAD
-                                        <button
-                                            className="btn-approve"
-                                            onClick={() => handleApprove(coach.id)}
-                                            disabled={approvalLoading === coach.id}
-                                        >
-                                            {approvalLoading === coach.id ? 'Approving...' : 'Approve'}
-                                        </button>
-=======
                                         {coach.is_approved ? (
                                             <span className="badge-success">Approved</span>
                                         ) : (
@@ -170,7 +136,6 @@ const CoachRequests = () => {
                                                 {approvalLoading === coach.id ? 'Approving...' : 'Approve'}
                                             </button>
                                         )}
->>>>>>> master
                                     </td>
                                 </tr>
                             ))}

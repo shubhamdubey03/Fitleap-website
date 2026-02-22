@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-import React from 'react';
-
-const VendorTable = () => {
-    const [isModalOpen, setIsModalOpen] = React.useState(false);
-    const [formData, setFormData] = React.useState({
-=======
 import React, { useState, useEffect } from 'react';
 
 const VendorTable = () => {
@@ -12,27 +5,10 @@ const VendorTable = () => {
     const [vendors, setVendors] = useState([]);
     const [statesList, setStatesList] = useState([]);
     const [formData, setFormData] = useState({
->>>>>>> master
         name: '',
         email: '',
         phone: '',
         category: '',
-<<<<<<< HEAD
-        address: ''
-    });
-
-    const vendors = [
-        { id: 1, name: 'FitEquip Co.', category: 'Equipment', rating: 4.8, revenue: '$15,000' },
-        { id: 2, name: 'HealthySnacks Inc.', category: 'Nutrition', rating: 4.5, revenue: '$8,200' },
-        { id: 3, name: 'GymWear Ltd.', category: 'Apparel', rating: 4.2, revenue: '$12,400' },
-        { id: 4, name: 'TechFitness', category: 'Technology', rating: 4.9, revenue: '$22,000' },
-    ];
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        alert('Add Vendor logic to be implemented\n' + JSON.stringify(formData, null, 2));
-        setIsModalOpen(false);
-=======
         address: '',
         city: '',
         pincode: '',
@@ -124,7 +100,6 @@ const VendorTable = () => {
             console.error('Submit error:', err);
             alert('Failed to connect to the server.');
         }
->>>>>>> master
     };
 
     const handleChange = (e) => {
@@ -219,17 +194,11 @@ const VendorTable = () => {
                                         name="address"
                                         value={formData.address}
                                         onChange={handleChange}
-<<<<<<< HEAD
-                                        placeholder="City, Country"
-=======
                                         placeholder="Street Address"
->>>>>>> master
                                         required
                                     />
                                 </div>
                             </div>
-<<<<<<< HEAD
-=======
                             <div className="form-row">
                                 <div className="form-group">
                                     <label>City</label>
@@ -273,7 +242,6 @@ const VendorTable = () => {
                                     </select>
                                 </div>
                             </div>
->>>>>>> master
                             <div className="modal-footer">
                                 <button type="button" className="btn-secondary" onClick={() => setIsModalOpen(false)}>Cancel</button>
                                 <button type="submit" className="btn-primary">Add Vendor</button>

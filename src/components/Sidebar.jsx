@@ -6,6 +6,10 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, onClose }) => {
         { id: 'vendors', label: 'Vendors', icon: '🏪' },
         { id: 'clients', label: 'Coach', icon: '💼' },
         { id: 'coach_requests', label: 'Requests', icon: '🔔' },
+<<<<<<< HEAD
+=======
+        { id: 'products', label: 'Products', icon: '🛍️' },
+>>>>>>> master
     ];
 
     return (
@@ -30,7 +34,11 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, onClose }) => {
                     ))}
                 </nav>
                 <div className="sidebar-footer">
+<<<<<<< HEAD
                     <button className="nav-item logout">
+=======
+                    <button className="nav-item logout" onClick={() => setActiveTab('logout')}>
+>>>>>>> master
                         <span className="icon">🚪</span>
                         <span className="label">Logout</span>
                     </button>

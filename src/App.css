@@ -614,18 +614,30 @@ tr:hover td {
     min-width: 600px;
     /* Ensure table doesn't squish too much */
   }
+<<<<<<< HEAD
 
+=======
+}
+>>>>>>> master
 
 /* Coach Approval Styles */
 .detail-cell {
   line-height: 1.4;
   color: #ccc;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 .docs-links {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 .doc-link {
   background: rgba(255, 255, 255, 0.1);
   padding: 4px 8px;
@@ -634,9 +646,17 @@ tr:hover td {
   font-size: 0.8em;
   text-decoration: none;
 }
+<<<<<<< HEAD
 .doc-link:hover {
   background: rgba(255, 255, 255, 0.2);
 }
+=======
+
+.doc-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+>>>>>>> master
 .btn-approve {
   background: #00ca4e;
   color: white;
@@ -647,9 +667,17 @@ tr:hover td {
   font-weight: 500;
   font-size: 0.9em;
 }
+<<<<<<< HEAD
 .btn-approve:hover {
   background: #00b044;
 }
+=======
+
+.btn-approve:hover {
+  background: #00b044;
+}
+
+>>>>>>> master
 .btn-approve:disabled {
   opacity: 0.6;
   cursor: not-allowed;

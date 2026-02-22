@@ -22,3 +22,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+README.md
+eslint.config.js
+public/
+server/.env
+server/package-lck.json
+server/setup.sql
+src/assets/
+vite.config.js
+package-lock.json

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import API_URL from '../config';
 
 const CoachRequests = () => {
     const [coaches, setCoaches] = useState([]);
@@ -8,7 +9,7 @@ const CoachRequests = () => {
 
     const fetchCoaches = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/admin/coaches');
+            const response = await fetch(`${API_URL}/admin/coaches`);
             const data = await response.json();
             if (response.ok) {
                 console.log('Fetched Coaches Data:', data);
@@ -34,7 +35,7 @@ const CoachRequests = () => {
 
         setApprovalLoading(coachId);
         try {
-            const response = await fetch(`http://localhost:5000/api/admin/approve-coach/${coachId}`, {
+            const response = await fetch(`${API_URL}/admin/approve-coach/${coachId}`, {
                 method: 'PUT',
             });
             const data = await response.json();

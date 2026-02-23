@@ -1,4 +1,5 @@
 import React from 'react';
+import API_URL from '../config';
 
 const UserTable = () => {
     const [users, setUsers] = React.useState([]);
@@ -6,7 +7,7 @@ const UserTable = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/admin/users');
+            const response = await fetch(`${API_URL}/admin/users`);
             console.log(response)
             const data = await response.json();
             if (response.ok) {

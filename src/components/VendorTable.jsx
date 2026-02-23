@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import API_URL from '../config';
 
 const VendorTable = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,7 +20,7 @@ const VendorTable = () => {
     const fetchVendors = async () => {
         try {
             const token = localStorage.getItem('adminToken');
-            const res = await fetch('http://localhost:5000/api/vendors/vendors', {
+            const res = await fetch(`${API_URL}/vendors/vendors`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const data = await res.json();
@@ -37,7 +38,7 @@ const VendorTable = () => {
     const fetchStates = async () => {
         try {
             const token = localStorage.getItem('adminToken');
-            const res = await fetch('http://localhost:5000/api/states', {
+            const res = await fetch(`${API_URL}/states`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const data = await res.json();
@@ -74,7 +75,7 @@ const VendorTable = () => {
             };
 
             const token = localStorage.getItem('adminToken');
-            const response = await fetch('http://localhost:5000/api/vendors/create-vendor', {
+            const response = await fetch(`${API_URL}/vendors/create-vendor`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

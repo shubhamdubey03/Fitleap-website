@@ -1,5 +1,5 @@
-
 import React, { useState } from 'react';
+import API_URL from '../config';
 
 const ClientTable = () => {
     const [coaches, setCoaches] = useState([]);
@@ -8,7 +8,7 @@ const ClientTable = () => {
 
     const fetchApprovedCoaches = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/admin/coaches');
+            const response = await fetch(`${API_URL}/admin/coaches`);
             const data = await response.json();
             console.log('Approved Coaches Fetch Response:', data); // Debug Log
             if (response.ok) {

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import Sidebar from './components/Sidebar';
 import UserTable from './components/UserTable';
@@ -6,40 +7,15 @@ import VendorTable from './components/VendorTable';
 import ClientTable from './components/ClientTable';
 import CoachRequests from './components/CoachRequests';
 import ProductTable from './components/ProductTable';
-
+import ResetPassword from './components/ResetPassword';
 import Login from './components/Login';
 
-function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+function Dashboard({ handleLogout }) {
   const [activeTab, setActiveTab] = useState('users');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Check auth state from localStorage on initial load
-  useEffect(() => {
-    const isAuth = localStorage.getItem('isAdminAuthenticated');
-    if (isAuth === 'true') {
-      setIsAuthenticated(true);
-    }
-  }, []);
-
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
   const closeSidebar = () => setIsSidebarOpen(false);
-
-  const handleLogin = () => {
-    setIsAuthenticated(true);
-    localStorage.setItem('isAdminAuthenticated', 'true');
-  };
-
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem('isAdminAuthenticated');
-    localStorage.removeItem('adminToken');
-  };
-
-  // If not authenticated, show Login screen
-  if (!isAuthenticated) {
-    return <Login onLogin={handleLogin} />;
-  }
 
   const renderContent = () => {
     switch (activeTab) {
@@ -80,6 +56,48 @@ function App() {
         {renderContent()}
       </main>
     </div>
+  );
+}
+
+function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const isAuth = localStorage.getItem('isAdminAuthenticated');
+    if (isAuth === 'true') {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+    localStorage.setItem('isAdminAuthenticated', 'true');
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem('isAdminAuthenticated');
+    localStorage.removeItem('adminToken');
+  };
+
+  return (
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            !isAuthenticated ? (
+              <Login onLogin={handleLogin} />
+            ) : (
+              <Dashboard handleLogout={handleLogout} />
+            )
+          }
+        />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </Router>
   );
 }
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import API_URL from '../config';
 
 const ProductTable = () => {
     const [products, setProducts] = useState([]);
@@ -14,11 +15,11 @@ const ProductTable = () => {
         category: ''
     });
 
-    const API_URL = 'http://localhost:5000/api/orders/products';
+    const PRODUCT_API = `${API_URL}/orders/products`;
 
     const fetchProducts = async () => {
         try {
-            const response = await fetch(API_URL);
+            const response = await fetch(PRODUCT_API);
             const data = await response.json();
             if (response.ok) {
                 setProducts(data);
@@ -39,7 +40,7 @@ const ProductTable = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this product?')) return;
         try {
-            const response = await fetch(`${API_URL}/${id}`, {
+            const response = await fetch(`${PRODUCT_API}/${id}`, {
                 method: 'DELETE',
             });
             if (response.ok) {
@@ -80,7 +81,7 @@ const ProductTable = () => {
         }
 
         try {
-            const response = await fetch(API_URL, {
+            const response = await fetch(PRODUCT_API, {
                 method: 'POST',
                 // Content-Type header must be undefined for FormData
                 body: data,

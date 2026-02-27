@@ -7,6 +7,7 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, onClose }) => {
         { id: 'clients', label: 'Coach', icon: '💼' },
         { id: 'coach_requests', label: 'Requests', icon: '🔔' },
         { id: 'products', label: 'Products', icon: '🛍️' },
+        { id: 'orders', label: 'Orders', icon: '📦' },
     ];
 
     return (

@@ -7,6 +7,7 @@ import VendorTable from './components/VendorTable';
 import ClientTable from './components/ClientTable';
 import CoachRequests from './components/CoachRequests';
 import ProductTable from './components/ProductTable';
+import OrderTable from './components/OrderTable';
 import ResetPassword from './components/ResetPassword';
 import Login from './components/Login';
 
@@ -29,6 +30,8 @@ function Dashboard({ handleLogout }) {
         return <CoachRequests />;
       case 'products':
         return <ProductTable />;
+      case 'orders':
+        return <OrderTable />;
       default:
         return <UserTable />;
     }

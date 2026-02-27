@@ -19,7 +19,12 @@ const ProductTable = () => {
 
     const fetchProducts = async () => {
         try {
-            const response = await fetch(PRODUCT_API);
+            const token = localStorage.getItem('adminToken');
+            const response = await fetch(PRODUCT_API, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             const data = await response.json();
             if (response.ok) {
                 setProducts(data);
@@ -40,8 +45,12 @@ const ProductTable = () => {
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this product?')) return;
         try {
+            const token = localStorage.getItem('adminToken');
             const response = await fetch(`${PRODUCT_API}/${id}`, {
                 method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             });
             if (response.ok) {
                 setProducts(products.filter(p => p.id !== id));
@@ -81,9 +90,12 @@ const ProductTable = () => {
         }
 
         try {
+            const token = localStorage.getItem('adminToken');
             const response = await fetch(PRODUCT_API, {
                 method: 'POST',
-                // Content-Type header must be undefined for FormData
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
                 body: data,
             });
             const result = await response.json();

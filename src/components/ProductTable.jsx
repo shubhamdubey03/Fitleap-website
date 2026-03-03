@@ -5,6 +5,8 @@ const ProductTable = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editingProductId, setEditingProductId] = useState(null);
     const [imageFile, setImageFile] = useState(null);
     const [formData, setFormData] = useState({
         name: '',
@@ -63,6 +65,20 @@ const ProductTable = () => {
         }
     };
 
+    const handleEdit = (product) => {
+        setFormData({
+            name: product.name,
+            description: product.description,
+            price: product.price,
+            stock: product.stock,
+            image_url: product.image_url,
+            category: product.category
+        });
+        setEditingProductId(product.id);
+        setIsEditing(true);
+        setShowModal(true);
+    };
+
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -91,35 +107,49 @@ const ProductTable = () => {
 
         try {
             const token = localStorage.getItem('adminToken');
-            const response = await fetch(PRODUCT_API, {
-                method: 'POST',
+            const url = isEditing ? `${PRODUCT_API}/${editingProductId}` : PRODUCT_API;
+            const method = isEditing ? 'PUT' : 'POST';
+
+            const response = await fetch(url, {
+                method: method,
                 headers: {
                     'Authorization': `Bearer ${token}`
                 },
                 body: data,
             });
+
             const result = await response.json();
             if (response.ok) {
-                alert('Product added successfully');
+                alert(isEditing ? 'Product updated successfully' : 'Product added successfully');
                 setShowModal(false);
+                setIsEditing(false);
+                setEditingProductId(null);
                 setFormData({ name: '', description: '', price: '', stock: '', image_url: '', category: '' });
                 setImageFile(null);
                 fetchProducts();
             } else {
-                alert('Failed to add product: ' + result.error);
+                alert(`Failed to ${isEditing ? 'update' : 'add'} product: ` + result.error);
             }
         } catch (error) {
-            console.error('Error adding product:', error);
+            console.error(`Error ${isEditing ? 'updating' : 'adding'} product:`, error);
         }
     };
 
     if (loading) return <div className="loading">Loading products...</div>;
 
+    const openAddModal = () => {
+        setIsEditing(false);
+        setEditingProductId(null);
+        setFormData({ name: '', description: '', price: '', stock: '', image_url: '', category: '' });
+        setImageFile(null);
+        setShowModal(true);
+    };
+
     return (
         <div className="content-section">
             <div className="section-header">
                 <h2>Marketplace Products</h2>
-                <button className="add-btn" onClick={() => setShowModal(true)}>+ Add Product</button>
+                <button className="add-btn" onClick={openAddModal}>+ Add Product</button>
             </div>
 
             <div className="table-container">
@@ -148,7 +178,10 @@ const ProductTable = () => {
                                     <td>₹{product.price}</td>
                                     <td>{product.stock}</td>
                                     <td>
-                                        <button className="delete-btn" onClick={() => handleDelete(product.id)} style={{ backgroundColor: '#e53935', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}>Delete</button>
+                                        <div style={{ display: 'flex', gap: '5px' }}>
+                                            <button className="edit-btn" onClick={() => handleEdit(product)} style={{ backgroundColor: '#2196F3', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}>Edit</button>
+                                            <button className="delete-btn" onClick={() => handleDelete(product.id)} style={{ backgroundColor: '#e53935', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}>Delete</button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))
@@ -160,7 +193,7 @@ const ProductTable = () => {
             {showModal && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                        <h3>Add New Product</h3>
+                        <h3>{isEditing ? 'Edit Product' : 'Add New Product'}</h3>
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
                                 <label>Name</label>
@@ -190,7 +223,7 @@ const ProductTable = () => {
                             </div>
                             <div className="modal-actions">
                                 <button type="button" onClick={() => setShowModal(false)} className="cancel-btn">Cancel</button>
-                                <button type="submit" className="submit-btn" style={{ backgroundColor: '#4CAF50', color: 'white', marginLeft: '10px' }}>Add Product</button>
+                                <button type="submit" className="submit-btn" style={{ backgroundColor: '#4CAF50', color: 'white', marginLeft: '10px' }}>{isEditing ? 'Update Product' : 'Add Product'}</button>
                             </div>
                         </form>
                     </div>

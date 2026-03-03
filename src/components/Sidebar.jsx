@@ -10,7 +10,11 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, onClose }) => {
         { id: 'workouts', label: 'Workouts', icon: '🏋️‍♂️' },
         { id: 'workout_categories', label: 'Workout Categories', icon: '📁' },
         { id: 'orders', label: 'Orders', icon: '📦' },
+        { id: 'subscription_plans', label: 'Subscriptions', icon: '💳' },
+        { id: 'notifications', label: 'Notifications', icon: '📢' },
     ];
+
+
 
     return (
         <>

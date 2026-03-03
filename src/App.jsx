@@ -12,6 +12,10 @@ import WorkoutCategoryTable from './components/WorkoutCategoryTable';
 import OrderTable from './components/OrderTable';
 import ResetPassword from './components/ResetPassword';
 import Login from './components/Login';
+import SubscriptionPlanTable from './components/SubscriptionPlanTable';
+import NotificationForm from './components/NotificationForm';
+
+
 
 function Dashboard({ handleLogout }) {
   const [activeTab, setActiveTab] = useState('users');
@@ -38,6 +42,12 @@ function Dashboard({ handleLogout }) {
         return <WorkoutCategoryTable />;
       case 'orders':
         return <OrderTable />;
+      case 'subscription_plans':
+        return <SubscriptionPlanTable />;
+      case 'notifications':
+        return <NotificationForm />;
+
+
       default:
         return <UserTable />;
     }

@@ -234,6 +234,19 @@ tr:hover td {
   font-weight: 500;
 }
 
+.doc-frame {
+  width: 100%;
+  height: 60vh;
+  border-radius: 8px;
+}
+
+.doc-img {
+  width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
 .avatar {
   width: 32px;
   height: 32px;

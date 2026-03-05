@@ -14,6 +14,7 @@ import ResetPassword from './components/ResetPassword';
 import Login from './components/Login';
 import SubscriptionPlanTable from './components/SubscriptionPlanTable';
 import NotificationForm from './components/NotificationForm';
+import StudentRequests from './components/StudentRequests';
 
 
 
@@ -34,6 +35,8 @@ function Dashboard({ handleLogout }) {
         return <ClientTable />;
       case 'coach_requests':
         return <CoachRequests />;
+      case 'student_requests':
+        return <StudentRequests />;
       case 'products':
         return <ProductTable />;
       case 'workouts':

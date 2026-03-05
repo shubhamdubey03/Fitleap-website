@@ -6,6 +6,7 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, onClose }) => {
         { id: 'vendors', label: 'Vendors', icon: '🏪' },
         { id: 'clients', label: 'Coach', icon: '💼' },
         { id: 'coach_requests', label: 'Requests', icon: '🔔' },
+        { id: 'student_requests', label: 'Student Requests', icon: '🎓' },
         { id: 'products', label: 'Products', icon: '🛍️' },
         { id: 'workouts', label: 'Workouts', icon: '🏋️‍♂️' },
         { id: 'workout_categories', label: 'Workout Categories', icon: '📁' },

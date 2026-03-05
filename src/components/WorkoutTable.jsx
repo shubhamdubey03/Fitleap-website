@@ -23,7 +23,9 @@ const WorkoutTable = () => {
                 fetch(WORKOUT_API, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 }),
-                fetch(CATEGORY_API)
+                fetch(CATEGORY_API, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                })
             ]);
 
             const workoutData = await workoutRes.json();

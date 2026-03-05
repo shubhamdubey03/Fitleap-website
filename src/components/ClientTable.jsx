@@ -8,11 +8,16 @@ const ClientTable = () => {
 
     const fetchApprovedCoaches = async () => {
         try {
-            const response = await fetch(`${API_URL}/admin/coaches`);
+            const token = localStorage.getItem('adminToken');
+            const response = await fetch(`${API_URL}/admin/coaches`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             const data = await response.json();
             console.log('Approved Coaches Fetch Response:', data); // Debug Log
             if (response.ok) {
-                setCoaches(data);
+                setCoaches(data.data || []);
             } else {
                 console.error('Failed to fetch coaches:', data.message);
             }

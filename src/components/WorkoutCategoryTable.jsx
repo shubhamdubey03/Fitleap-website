@@ -14,7 +14,10 @@ const WorkoutCategoryTable = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await fetch(CATEGORY_API);
+            const token = localStorage.getItem('adminToken');
+            const response = await fetch(CATEGORY_API, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             const data = await response.json();
             if (response.ok) {
                 setCategories(data.data || []);
@@ -39,10 +42,12 @@ const WorkoutCategoryTable = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            const token = localStorage.getItem('adminToken');
             const response = await fetch(`${CATEGORY_API}/create`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(formData),
             });

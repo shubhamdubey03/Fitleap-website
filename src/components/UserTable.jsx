@@ -7,7 +7,12 @@ const UserTable = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch(`${API_URL}/admin/users`);
+            const token = localStorage.getItem('adminToken');
+            const response = await fetch(`${API_URL}/admin/users`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             console.log(response)
             const data = await response.json();
             if (response.ok) {

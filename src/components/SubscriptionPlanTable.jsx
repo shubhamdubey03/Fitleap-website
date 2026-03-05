@@ -21,7 +21,10 @@ const SubscriptionPlanTable = () => {
 
     const fetchCoaches = async () => {
         try {
-            const response = await fetch(`${API_URL}/admin/coaches`);
+            const token = localStorage.getItem('adminToken');
+            const response = await fetch(`${API_URL}/admin/coaches`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             const data = await response.json();
             if (response.ok) {
                 setCoaches(data.data || []);
@@ -37,7 +40,10 @@ const SubscriptionPlanTable = () => {
             const url = coachId
                 ? `${API_URL}/v1/subscriptions/${coachId}/plans`
                 : `${PLANS_API}/all`;
-            const response = await fetch(url);
+            const token = localStorage.getItem('adminToken');
+            const response = await fetch(url, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             const data = await response.json();
             if (response.ok) {
                 setPlans(data.data || []);

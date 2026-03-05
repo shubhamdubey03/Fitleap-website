@@ -9,12 +9,18 @@ const CoachRequests = () => {
 
     const fetchCoaches = async () => {
         try {
-            const response = await fetch(`${API_URL}/admin/coaches`);
+            const token = localStorage.getItem('adminToken');
+            const response = await fetch(`${API_URL}/admin/coaches`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             const data = await response.json();
             if (response.ok) {
                 console.log('Fetched Coaches Data:', data);
                 // Filter to show only pending coaches
-                const pendingCoaches = data.filter(coach => !coach.is_approved);
+                const coachesArray = data.data || [];
+                const pendingCoaches = coachesArray.filter(coach => !coach.is_approved);
                 setCoaches(pendingCoaches);
             } else {
                 console.error('Failed to fetch coaches:', data.message);
@@ -35,8 +41,12 @@ const CoachRequests = () => {
 
         setApprovalLoading(coachId);
         try {
+            const token = localStorage.getItem('adminToken');
             const response = await fetch(`${API_URL}/admin/approve-coach/${coachId}`, {
                 method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             });
             const data = await response.json();
 

@@ -7,23 +7,43 @@ const SubscriptionPlanTable = () => {
     const [showModal, setShowModal] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [selectedPlanId, setSelectedPlanId] = useState(null);
+    const [coaches, setCoaches] = useState([]);
+    const [selectedViewCoachId, setSelectedViewCoachId] = useState('');
     const [formData, setFormData] = useState({
         plan_name: '',
         price: '',
         duration_days: '',
-        features: ''
+        features: '',
+        coach_id: ''
     });
 
     const PLANS_API = `${API_URL}/v1/subscriptions/plans`;
 
-    const fetchPlans = async () => {
+    const fetchCoaches = async () => {
         try {
-            const response = await fetch(`${PLANS_API}/all`);
+            const response = await fetch(`${API_URL}/admin/coaches`);
+            const data = await response.json();
+            if (response.ok) {
+                setCoaches(data.data || []);
+            }
+        } catch (error) {
+            console.error('Error fetching coaches:', error);
+        }
+    };
+
+    const fetchPlans = async (coachId = selectedViewCoachId) => {
+        setLoading(true);
+        try {
+            const url = coachId
+                ? `${API_URL}/v1/subscriptions/${coachId}/plans`
+                : `${PLANS_API}/all`;
+            const response = await fetch(url);
             const data = await response.json();
             if (response.ok) {
                 setPlans(data.data || []);
             } else {
                 console.error('Failed to fetch plans:', data.error);
+                setPlans([]);
             }
         } catch (error) {
             console.error('Error fetching plans:', error);
@@ -33,6 +53,7 @@ const SubscriptionPlanTable = () => {
     };
 
     useEffect(() => {
+        fetchCoaches();
         fetchPlans();
     }, []);
 
@@ -66,10 +87,10 @@ const SubscriptionPlanTable = () => {
             if (response.ok) {
                 alert(isEditing ? 'Plan updated successfully' : 'Plan added successfully');
                 setShowModal(false);
-                setFormData({ plan_name: '', price: '', duration_days: '', features: '' });
+                setFormData({ plan_name: '', price: '', duration_days: '', features: '', coach_id: '' });
                 setIsEditing(false);
                 setSelectedPlanId(null);
-                fetchPlans();
+                fetchPlans(selectedViewCoachId);
             } else {
                 alert('Action failed: ' + result.error);
             }
@@ -83,7 +104,8 @@ const SubscriptionPlanTable = () => {
             plan_name: plan.plan_name,
             price: plan.price,
             duration_days: plan.duration_days,
-            features: Array.isArray(plan.features) ? plan.features.join(', ') : ''
+            features: Array.isArray(plan.features) ? plan.features.join(', ') : '',
+            coach_id: plan.coach_id || ''
         });
         setSelectedPlanId(plan.id);
         setIsEditing(true);
@@ -104,7 +126,7 @@ const SubscriptionPlanTable = () => {
             const result = await response.json();
             if (response.ok) {
                 alert('Plan deleted successfully');
-                fetchPlans();
+                fetchPlans(selectedViewCoachId);
             } else {
                 alert('Failed to delete plan: ' + result.error);
             }
@@ -119,11 +141,35 @@ const SubscriptionPlanTable = () => {
         <div className="content-section">
             <div className="section-header">
                 <h2>Subscription Plans</h2>
-                <button className="add-btn" onClick={() => {
-                    setFormData({ plan_name: '', price: '', duration_days: '', features: '' });
-                    setIsEditing(false);
-                    setShowModal(true);
-                }}>+ Add Plan</button>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                    <select
+                        value={selectedViewCoachId}
+                        onChange={(e) => {
+                            const cid = e.target.value;
+                            setSelectedViewCoachId(cid);
+                            fetchPlans(cid);
+                        }}
+                        style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                    >
+                        <option value="">Platform Plans (All)</option>
+                        {coaches.map(coach => (
+                            <option key={coach.id} value={coach.user_id}>
+                                {coach.users?.name || coach.name || 'Coach ' + coach.id}
+                            </option>
+                        ))}
+                    </select>
+                    <button className="add-btn" onClick={() => {
+                        setFormData({
+                            plan_name: '',
+                            price: '',
+                            duration_days: '',
+                            features: '',
+                            coach_id: selectedViewCoachId // Default to selected coach
+                        });
+                        setIsEditing(false);
+                        setShowModal(true);
+                    }}>+ Add Plan</button>
+                </div>
             </div>
 
             <div className="table-container">
@@ -167,6 +213,22 @@ const SubscriptionPlanTable = () => {
                     <div className="modal-content">
                         <h3>{isEditing ? 'Edit Plan' : 'Add New Plan'}</h3>
                         <form onSubmit={handleSubmit}>
+                            <div className="form-group">
+                                <label>Assign to Coach (Optional)</label>
+                                <select
+                                    name="coach_id"
+                                    value={formData.coach_id}
+                                    onChange={handleInputChange}
+                                    style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc', marginBottom: '10px' }}
+                                >
+                                    <option value="">Platform (No Coach)</option>
+                                    {coaches.map(coach => (
+                                        <option key={coach.id} value={coach.user_id}>
+                                            {coach.users?.name || coach.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                             <div className="form-group">
                                 <label>Plan Name</label>
                                 <input type="text" name="plan_name" value={formData.plan_name} onChange={handleInputChange} required />

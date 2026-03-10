@@ -14,8 +14,10 @@ const ProductTable = () => {
         price: '',
         stock: '',
         image_url: '',
-        category: ''
+        category: '',
+        gst_percent: 0
     });
+
 
     const PRODUCT_API = `${API_URL}/orders/products`;
 
@@ -72,8 +74,10 @@ const ProductTable = () => {
             price: product.price,
             stock: product.stock,
             image_url: product.image_url,
-            category: product.category
+            category: product.category,
+            gst_percent: product.gst_percent || 0
         });
+
         setEditingProductId(product.id);
         setIsEditing(true);
         setShowModal(true);
@@ -98,6 +102,8 @@ const ProductTable = () => {
         data.append('price', formData.price);
         data.append('stock', formData.stock);
         data.append('category', formData.category);
+        data.append('gst_percent', formData.gst_percent);
+
 
         if (imageFile) {
             data.append('image', imageFile);
@@ -124,7 +130,8 @@ const ProductTable = () => {
                 setShowModal(false);
                 setIsEditing(false);
                 setEditingProductId(null);
-                setFormData({ name: '', description: '', price: '', stock: '', image_url: '', category: '' });
+                setFormData({ name: '', description: '', price: '', stock: '', image_url: '', category: '', gst_percent: 0 });
+
                 setImageFile(null);
                 fetchProducts();
             } else {
@@ -140,7 +147,8 @@ const ProductTable = () => {
     const openAddModal = () => {
         setIsEditing(false);
         setEditingProductId(null);
-        setFormData({ name: '', description: '', price: '', stock: '', image_url: '', category: '' });
+        setFormData({ name: '', description: '', price: '', stock: '', image_url: '', category: '', gst_percent: 0 });
+
         setImageFile(null);
         setShowModal(true);
     };
@@ -160,8 +168,10 @@ const ProductTable = () => {
                             <th>Name</th>
                             <th>Category</th>
                             <th>Price</th>
+                            <th>GST (%)</th>
                             <th>Stock</th>
                             <th>Action</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -176,7 +186,9 @@ const ProductTable = () => {
                                     <td>{product.name}</td>
                                     <td>{product.category}</td>
                                     <td>₹{product.price}</td>
+                                    <td>{product.gst_percent || 0}%</td>
                                     <td>{product.stock}</td>
+
                                     <td>
                                         <div style={{ display: 'flex', gap: '5px' }}>
                                             <button className="edit-btn" onClick={() => handleEdit(product)} style={{ backgroundColor: '#2196F3', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}>Edit</button>
@@ -215,6 +227,12 @@ const ProductTable = () => {
                                 <label>Category</label>
                                 <input type="text" name="category" value={formData.category} onChange={handleInputChange} required />
                             </div>
+                            <div className="form-group">
+                                <label>GST Percentage (%)</label>
+                                <input type="number" name="gst_percent" value={formData.gst_percent} onChange={handleInputChange} required />
+                            </div>
+
+
                             <div className="form-group">
                                 <label>Product Image</label>
                                 <input type="file" onChange={handleFileChange} accept="image/*" />

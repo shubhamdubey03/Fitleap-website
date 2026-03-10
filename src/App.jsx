@@ -15,6 +15,9 @@ import Login from './components/Login';
 import SubscriptionPlanTable from './components/SubscriptionPlanTable';
 import NotificationForm from './components/NotificationForm';
 import StudentRequests from './components/StudentRequests';
+import PCTable from './components/PCTable';
+import PCSubscriptionPlanTable from './components/PCSubscriptionPlanTable';
+
 
 
 
@@ -43,12 +46,17 @@ function Dashboard({ handleLogout }) {
         return <WorkoutTable />;
       case 'workout_categories':
         return <WorkoutCategoryTable />;
+      case 'pc':
+        return <PCTable />;
       case 'orders':
         return <OrderTable />;
       case 'subscription_plans':
         return <SubscriptionPlanTable />;
+      case 'pc_subscription_plans':
+        return <PCSubscriptionPlanTable />;
       case 'notifications':
         return <NotificationForm />;
+
 
 
       default:

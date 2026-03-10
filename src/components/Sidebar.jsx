@@ -10,8 +10,10 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, onClose }) => {
         { id: 'products', label: 'Products', icon: '🛍️' },
         { id: 'workouts', label: 'Workouts', icon: '🏋️‍♂️' },
         { id: 'workout_categories', label: 'Workout Categories', icon: '📁' },
+        { id: 'pc', label: 'Programs & Challenges', icon: '🎯' },
         { id: 'orders', label: 'Orders', icon: '📦' },
         { id: 'subscription_plans', label: 'Subscriptions', icon: '💳' },
+        { id: 'pc_subscription_plans', label: 'Program Subscriptions', icon: '📜' },
         { id: 'notifications', label: 'Notifications', icon: '📢' },
     ];
 

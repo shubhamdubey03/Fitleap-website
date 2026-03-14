@@ -49,6 +49,27 @@
   flex-direction: column;
   gap: 0.75rem;
   flex: 1;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  margin-right: -0.5rem;
+}
+
+/* Custom Scrollbar for Sidebar */
+.sidebar-nav::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .nav-item {
@@ -672,6 +693,27 @@ tr:hover td {
 }
 
 .btn-approve:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-reject {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9em;
+  transition: background 0.2s;
+}
+
+.btn-reject:hover {
+  background: #ff3333;
+}
+
+.btn-reject:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }

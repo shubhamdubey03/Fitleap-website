@@ -65,6 +65,35 @@ const StudentRequests = () => {
         }
     };
 
+    const handleReject = async (studentId) => {
+        if (!window.confirm('Are you sure you want to reject this student request? This will delete the user.')) return;
+
+        setApprovalLoading(studentId);
+        try {
+            const token = localStorage.getItem('adminToken');
+            const response = await fetch(`${API_URL}/admin/reject-student/${studentId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Student Request Rejected Successfully!');
+                // Remove from list
+                setStudents(students.filter(s => s.id !== studentId));
+            } else {
+                alert('Failed to reject: ' + data.message);
+            }
+        } catch (error) {
+            console.error('Error rejecting student:', error);
+            alert('Error rejecting student');
+        } finally {
+            setApprovalLoading(null);
+        }
+    };
+
     // Helper to open doc
     const openDoc = (url, title) => {
         setSelectedDoc({ url, title });
@@ -112,13 +141,22 @@ const StudentRequests = () => {
                                         )}
                                     </td>
                                     <td>
-                                        <button
-                                            className="btn-approve"
-                                            onClick={() => handleApprove(student.id)}
-                                            disabled={approvalLoading === student.id}
-                                        >
-                                            {approvalLoading === student.id ? 'Approving...' : 'Approve'}
-                                        </button>
+                                        <div className="actions-cell" style={{ display: 'flex', gap: '8px' }}>
+                                            <button
+                                                className="btn-approve"
+                                                onClick={() => handleApprove(student.id)}
+                                                disabled={approvalLoading === student.id}
+                                            >
+                                                {approvalLoading === student.id ? '...' : 'Approve'}
+                                            </button>
+                                            <button
+                                                className="btn-reject"
+                                                onClick={() => handleReject(student.id)}
+                                                disabled={approvalLoading === student.id}
+                                            >
+                                                Reject
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}

@@ -65,6 +65,35 @@ const CoachRequests = () => {
         }
     };
 
+    const handleReject = async (coachId) => {
+        if (!window.confirm('Are you sure you want to reject this coach request? This will delete the user.')) return;
+
+        setApprovalLoading(coachId);
+        try {
+            const token = localStorage.getItem('adminToken');
+            const response = await fetch(`${API_URL}/admin/reject-coach/${coachId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Coach Request Rejected Successfully!');
+                // Remove from list
+                setCoaches(coaches.filter(c => c.id !== coachId));
+            } else {
+                alert('Failed to reject: ' + data.message);
+            }
+        } catch (error) {
+            console.error('Error rejecting coach:', error);
+            alert('Error rejecting coach');
+        } finally {
+            setApprovalLoading(null);
+        }
+    };
+
     // Helper to open doc
     const openDoc = (url, title) => {
         setSelectedDoc({ url, title });
@@ -139,13 +168,22 @@ const CoachRequests = () => {
                                         {coach.is_approved ? (
                                             <span className="badge-success">Approved</span>
                                         ) : (
-                                            <button
-                                                className="btn-approve"
-                                                onClick={() => handleApprove(coach.id)}
-                                                disabled={approvalLoading === coach.id}
-                                            >
-                                                {approvalLoading === coach.id ? 'Approving...' : 'Approve'}
-                                            </button>
+                                            <div style={{ display: 'flex', gap: '8px' }}>
+                                                <button
+                                                    className="btn-approve"
+                                                    onClick={() => handleApprove(coach.id)}
+                                                    disabled={approvalLoading === coach.id}
+                                                >
+                                                    {approvalLoading === coach.id ? '...' : 'Approve'}
+                                                </button>
+                                                <button
+                                                    className="btn-reject"
+                                                    onClick={() => handleReject(coach.id)}
+                                                    disabled={approvalLoading === coach.id}
+                                                >
+                                                    Reject
+                                                </button>
+                                            </div>
                                         )}
                                     </td>
                                 </tr>

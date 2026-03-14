@@ -60,16 +60,31 @@ const VendorTable = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Mobile validation
+        const mobileRegex = /^[0-9]{10}$/;
+        if (!mobileRegex.test(formData.phone)) {
+            alert("Please enter a valid 10-digit mobile number");
+            return;
+        }
+
+        // Pincode validation (numbers only)
+        const pincodeRegex = /^[0-9]+$/;
+        if (!pincodeRegex.test(formData.pincode)) {
+            alert("Pincode must contain only numbers");
+            return;
+        }
+
         try {
             const payload = {
-                name: formData.name,
-                email: formData.email,
-                mobile: formData.phone,
+                name: formData.name.trim(),
+                email: formData.email.trim().toLowerCase(),
+                mobile: formData.phone.trim(),
                 country_code: "+91",
                 category: formData.category,
-                address1: formData.address,
-                city: formData.city,
-                pincode: formData.pincode,
+                address1: formData.address.trim(),
+                city: formData.city.trim(),
+                pincode: formData.pincode.trim(),
                 address_type: formData.address_type,
                 state_id: formData.state_id
             };
@@ -85,6 +100,8 @@ const VendorTable = () => {
             });
 
             const data = await response.json();
+
+            console.log('response', data, response)
 
             if (response.ok) {
                 alert(`Vendor created!\nTemporary Password: ${data.login_password}\n(Also sent via Email)`);
@@ -114,23 +131,32 @@ const VendorTable = () => {
                 <button className="btn-primary" onClick={() => setIsModalOpen(true)}>+ Add Vendor</button>
             </div>
 
-            <div className="grid-container">
-                {vendors.map((vendor) => (
-                    <div key={vendor.id} className="card vendor-card">
-                        <div className="card-header">
-                            <h3>{vendor.name}</h3>
-                            <span className="badge">{vendor.category}</span>
-                        </div>
-                        <div className="card-body">
-                            <p>Rating: ⭐ {vendor.rating}</p>
-                            <p>Monthly Revenue: <strong>{vendor.revenue}</strong></p>
-                        </div>
-                        <div className="card-footer">
-                            <button className="btn-secondary">View Profile</button>
-                            <button className="btn-outline">Report</button>
-                        </div>
-                    </div>
-                ))}
+            <div className="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Vendor Name</th>
+                            <th>Category</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {vendors.map((vendor) => (
+                            <tr key={vendor.id}>
+                                <td>
+                                    <div className="user-cell">
+                                        <div className="avatar">{vendor.name?.charAt(0) || 'V'}</div>
+                                        {vendor.name}
+                                    </div>
+                                </td>
+                                <td><span className="badge">{vendor.category}</span></td>
+                                <td>{vendor.email}</td>
+                                <td>{vendor.phone}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
 
             {/* Modal */}
@@ -219,6 +245,11 @@ const VendorTable = () => {
                                         name="pincode"
                                         value={formData.pincode}
                                         onChange={handleChange}
+                                        onKeyPress={(e) => {
+                                            if (!/[0-9]/.test(e.key)) {
+                                                e.preventDefault();
+                                            }
+                                        }}
                                         placeholder="Pincode"
                                         required
                                     />

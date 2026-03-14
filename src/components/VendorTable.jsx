@@ -16,6 +16,7 @@ const VendorTable = () => {
         address_type: 'business',
         state_id: ''
     });
+    const [submitting, setSubmitting] = useState(false);
 
     const fetchVendors = async () => {
         try {
@@ -76,6 +77,7 @@ const VendorTable = () => {
         }
 
         try {
+            setSubmitting(true);
             const payload = {
                 name: formData.name.trim(),
                 email: formData.email.trim().toLowerCase(),
@@ -117,6 +119,8 @@ const VendorTable = () => {
         } catch (err) {
             console.error('Submit error:', err);
             alert('Failed to connect to the server.');
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -275,8 +279,10 @@ const VendorTable = () => {
                                 </div>
                             </div>
                             <div className="modal-footer">
-                                <button type="button" className="btn-secondary" onClick={() => setIsModalOpen(false)}>Cancel</button>
-                                <button type="submit" className="btn-primary">Add Vendor</button>
+                                <button type="button" className="btn-secondary" onClick={() => setIsModalOpen(false)} disabled={submitting}>Cancel</button>
+                                <button type="submit" className="btn-primary" disabled={submitting}>
+                                    {submitting ? 'Adding...' : 'Add Vendor'}
+                                </button>
                             </div>
                         </form>
                     </div>

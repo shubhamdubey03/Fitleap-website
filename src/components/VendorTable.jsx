@@ -4,6 +4,10 @@ import API_URL from '../config';
 const VendorTable = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [vendors, setVendors] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalVendors, setTotalVendors] = useState(0);
+    const limit = 10;
     const [statesList, setStatesList] = useState([]);
     const [formData, setFormData] = useState({
         name: '',
@@ -18,16 +22,18 @@ const VendorTable = () => {
     });
     const [submitting, setSubmitting] = useState(false);
 
-    const fetchVendors = async () => {
+    const fetchVendors = async (page = 1) => {
         try {
             const token = localStorage.getItem('adminToken');
-            const res = await fetch(`${API_URL}/vendors/vendors`, {
+            const res = await fetch(`${API_URL}/vendors/vendors?page=${page}&limit=${limit}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const data = await res.json();
-            console.log("hhhhhhhhnnnnnnnnnnnnhh", data);
             if (res.ok) {
-                setVendors(data);
+                setVendors(data.data || []);
+                setTotalPages(data.totalPages || 1);
+                setTotalVendors(data.total || 0);
+                setCurrentPage(data.page || 1);
             } else {
                 console.error("Failed to load vendors:", data.error);
             }
@@ -55,9 +61,15 @@ const VendorTable = () => {
     };
 
     useEffect(() => {
-        fetchVendors();
+        fetchVendors(1);
         fetchStates();
     }, []);
+
+    const handlePageChange = (newPage) => {
+        if (newPage >= 1 && newPage <= totalPages) {
+            fetchVendors(newPage);
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -112,7 +124,7 @@ const VendorTable = () => {
                     name: '', email: '', phone: '', category: '', address: '',
                     city: '', pincode: '', address_type: 'business', state_id: ''
                 });
-                fetchVendors(); // Refresh the dynamic list
+                fetchVendors(1); // Refresh the dynamic list
             } else {
                 alert(`Error: ${data.error || data.message || 'Failed to create vendor'}`);
             }
@@ -146,22 +158,56 @@ const VendorTable = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {vendors.map((vendor) => (
-                            <tr key={vendor.id}>
-                                <td>
-                                    <div className="user-cell">
-                                        <div className="avatar">{vendor.name?.charAt(0) || 'V'}</div>
-                                        {vendor.name}
-                                    </div>
-                                </td>
-                                <td><span className="badge">{vendor.category}</span></td>
-                                <td>{vendor.email}</td>
-                                <td>{vendor.phone}</td>
-                            </tr>
-                        ))}
+                        {vendors.length === 0 ? (
+                            <tr><td colSpan="4" style={{ textAlign: 'center' }}>No vendors found</td></tr>
+                        ) : (
+                            vendors.map((vendor) => (
+                                <tr key={vendor.id}>
+                                    <td>
+                                        <div className="user-cell">
+                                            <div className="avatar">{vendor.name?.charAt(0) || 'V'}</div>
+                                            {vendor.name}
+                                        </div>
+                                    </td>
+                                    <td><span className="badge">{vendor.category}</span></td>
+                                    <td>{vendor.email}</td>
+                                    <td>{vendor.phone}</td>
+                                </tr>
+                            ))
+                        )}
                     </tbody>
                 </table>
             </div>
+
+            {totalPages > 1 && (
+                <div className="pagination">
+                    <button
+                        className="pagination-btn"
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                    >
+                        Previous
+                    </button>
+                    <div className="pagination-numbers">
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                            <button
+                                key={pageNum}
+                                className={`pagination-btn ${currentPage === pageNum ? 'active' : ''}`}
+                                onClick={() => handlePageChange(pageNum)}
+                            >
+                                {pageNum}
+                            </button>
+                        ))}
+                    </div>
+                    <button
+                        className="pagination-btn"
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                    >
+                        Next
+                    </button>
+                </div>
+            )}
 
             {/* Modal */}
             {isModalOpen && (

@@ -17,7 +17,6 @@ const UserTable = () => {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            console.log("................**88", response)
             const data = await response.json();
             if (response.ok) {
                 setUsers(data.users || []);

@@ -4,13 +4,17 @@ import API_URL from '../config';
 const CoachRequests = () => {
     const [coaches, setCoaches] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const limit = 10;
     const [approvalLoading, setApprovalLoading] = useState(null); // ID of coach being approved
     const [selectedDoc, setSelectedDoc] = useState(null); // { url, type, title }
 
-    const fetchCoaches = async () => {
+    const fetchCoaches = async (page = 1) => {
         try {
+            setLoading(true);
             const token = localStorage.getItem('adminToken');
-            const response = await fetch(`${API_URL}/admin/coaches`, {
+            const response = await fetch(`${API_URL}/admin/coaches?page=${page}&limit=${limit}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -22,6 +26,8 @@ const CoachRequests = () => {
                 const coachesArray = data.data || [];
                 const pendingCoaches = coachesArray.filter(coach => !coach.is_approved);
                 setCoaches(pendingCoaches);
+                setTotalPages(data.totalPages || 1);
+                setCurrentPage(data.page || 1);
             } else {
                 console.error('Failed to fetch coaches:', data.message);
             }
@@ -33,8 +39,14 @@ const CoachRequests = () => {
     };
 
     useEffect(() => {
-        fetchCoaches();
+        fetchCoaches(1);
     }, []);
+
+    const handlePageChange = (newPage) => {
+        if (newPage >= 1 && newPage <= totalPages) {
+            fetchCoaches(newPage);
+        }
+    };
 
     const handleApprove = async (coachId) => {
         if (!window.confirm('Are you sure you want to approve this coach?')) return;
@@ -42,10 +54,10 @@ const CoachRequests = () => {
         setApprovalLoading(coachId);
         try {
             const token = localStorage.getItem('adminToken');
-            const response = await fetch(`${API_URL}/admin/approve-coach/${coachId}`, {
+            const response = await fetch(`${API_URL} /admin/approve - coach / ${coachId} `, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token} `
                 }
             });
             const data = await response.json();
@@ -71,10 +83,10 @@ const CoachRequests = () => {
         setApprovalLoading(coachId);
         try {
             const token = localStorage.getItem('adminToken');
-            const response = await fetch(`${API_URL}/admin/reject-coach/${coachId}`, {
+            const response = await fetch(`${API_URL} /admin/reject - coach / ${coachId} `, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token} `
                 }
             });
             const data = await response.json();
@@ -190,6 +202,36 @@ const CoachRequests = () => {
                             ))}
                         </tbody>
                     </table>
+                </div>
+            )}
+
+            {totalPages > 1 && (
+                <div className="pagination">
+                    <button
+                        className="pagination-btn"
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                    >
+                        Previous
+                    </button>
+                    <div className="pagination-numbers">
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                            <button
+                                key={pageNum}
+                                className={`pagination-btn ${currentPage === pageNum ? 'active' : ''}`}
+                                onClick={() => handlePageChange(pageNum)}
+                            >
+                                {pageNum}
+                            </button>
+                        ))}
+                    </div>
+                    <button
+                        className="pagination-btn"
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                    >
+                        Next
+                    </button>
                 </div>
             )}
 

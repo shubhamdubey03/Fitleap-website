@@ -4,13 +4,17 @@ import API_URL from '../config';
 const StudentRequests = () => {
     const [students, setStudents] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const limit = 10;
     const [approvalLoading, setApprovalLoading] = useState(null); // ID of student being approved
     const [selectedDoc, setSelectedDoc] = useState(null); // { url, title }
 
-    const fetchStudents = async () => {
+    const fetchStudents = async (page = 1) => {
         try {
+            setLoading(true);
             const token = localStorage.getItem('adminToken');
-            const response = await fetch(`${API_URL}/admin/student-requests`, {
+            const response = await fetch(`${API_URL}/admin/student-requests?page=${page}&limit=${limit}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -18,10 +22,10 @@ const StudentRequests = () => {
             const data = await response.json();
             if (response.ok) {
                 console.log('Fetched Students Data:', data);
-                // Filter to show only pending students
-                const studentsArray = data.data || [];
-                const pendingStudents = studentsArray.filter(student => !student.is_active);
-                setStudents(pendingStudents);
+                // The backend now only returns pending students (is_active: false)
+                setStudents(data.data || []);
+                setTotalPages(data.totalPages || 1);
+                setCurrentPage(data.page || 1);
             } else {
                 console.error('Failed to fetch students:', data.message);
             }
@@ -33,8 +37,14 @@ const StudentRequests = () => {
     };
 
     useEffect(() => {
-        fetchStudents();
+        fetchStudents(1);
     }, []);
+
+    const handlePageChange = (newPage) => {
+        if (newPage >= 1 && newPage <= totalPages) {
+            fetchStudents(newPage);
+        }
+    };
 
     const handleApprove = async (studentId) => {
         if (!window.confirm('Are you sure you want to approve this student?')) return;
@@ -162,6 +172,36 @@ const StudentRequests = () => {
                             ))}
                         </tbody>
                     </table>
+                </div>
+            )}
+
+            {totalPages > 1 && (
+                <div className="pagination">
+                    <button
+                        className="pagination-btn"
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                    >
+                        Previous
+                    </button>
+                    <div className="pagination-numbers">
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                            <button
+                                key={pageNum}
+                                className={`pagination-btn ${currentPage === pageNum ? 'active' : ''}`}
+                                onClick={() => handlePageChange(pageNum)}
+                            >
+                                {pageNum}
+                            </button>
+                        ))}
+                    </div>
+                    <button
+                        className="pagination-btn"
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                    >
+                        Next
+                    </button>
                 </div>
             )}
 

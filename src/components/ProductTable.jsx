@@ -96,6 +96,11 @@ const ProductTable = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (formData.price < 0 || formData.stock < 0 || formData.gst_percent < 0) {
+            alert('Price, Stock, and GST cannot be negative');
+            return;
+        }
+
         const data = new FormData();
         data.append('name', formData.name);
         data.append('description', formData.description);
@@ -217,11 +222,11 @@ const ProductTable = () => {
                             </div>
                             <div className="form-group">
                                 <label>Price (₹)</label>
-                                <input type="number" name="price" value={formData.price} onChange={handleInputChange} required />
+                                <input type="number" name="price" value={formData.price} onChange={handleInputChange} min="0" required />
                             </div>
                             <div className="form-group">
                                 <label>Stock</label>
-                                <input type="number" name="stock" value={formData.stock} onChange={handleInputChange} required />
+                                <input type="number" name="stock" value={formData.stock} onChange={handleInputChange} min="0" required />
                             </div>
                             <div className="form-group">
                                 <label>Category</label>
@@ -229,7 +234,7 @@ const ProductTable = () => {
                             </div>
                             <div className="form-group">
                                 <label>GST Percentage (%)</label>
-                                <input type="number" name="gst_percent" value={formData.gst_percent} onChange={handleInputChange} required />
+                                <input type="number" name="gst_percent" value={formData.gst_percent} onChange={handleInputChange} min="0" required />
                             </div>
 
 

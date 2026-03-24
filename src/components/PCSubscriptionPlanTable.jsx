@@ -55,6 +55,11 @@ const PCSubscriptionPlanTable = () => {
             ? `${PC_PLANS_API}/update/${selectedPlanId}`
             : `${PC_PLANS_API}/create`;
 
+        if (formData.price < 0 || formData.days < 0) {
+            alert('Price and Duration cannot be negative');
+            return;
+        }
+
         const method = isEditing ? 'put' : 'post';
 
         try {
@@ -179,11 +184,11 @@ const PCSubscriptionPlanTable = () => {
                             <div className="form-row" style={{ display: 'flex', gap: '15px' }}>
                                 <div className="form-group" style={{ flex: 1 }}>
                                     <label>Duration (Days)</label>
-                                    <input type="number" name="days" value={formData.days} onChange={handleInputChange} required />
+                                    <input type="number" name="days" value={formData.days} onChange={handleInputChange} min="0" required />
                                 </div>
                                 <div className="form-group" style={{ flex: 1 }}>
                                     <label>Price (₹)</label>
-                                    <input type="number" name="price" value={formData.price} onChange={handleInputChange} required />
+                                    <input type="number" name="price" value={formData.price} onChange={handleInputChange} min="0" required />
                                 </div>
                             </div>
                             {isEditing && (

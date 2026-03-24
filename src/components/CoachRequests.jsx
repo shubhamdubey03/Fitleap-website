@@ -21,12 +21,20 @@ const CoachRequests = () => {
             });
             const data = await response.json();
             if (response.ok) {
-                console.log('Fetched Coaches Data:', data);
-                setCoaches(data.data || []);
+                const pendingCoaches = (data.data || []).filter(c => !c.is_approved);
+                setCoaches(pendingCoaches);
                 setTotalPages(data.totalPages || 1);
                 setCurrentPage(data.page || 1);
-                // If current page is empty and not page 1, go to previous page
-                if ((data.data || []).length === 0 && data.page > 1) {
+
+                // If currently showing nothing but backend sent something, keep current page
+                // But if this page is exhausted, move to first or previous
+                if (pendingCoaches.length === 0 && (data.data || []).length > 0) {
+                     // The backend returned only approved coaches (meaning the filter didn't work)
+                     // or the current page is just full of newly approved coaches.
+                     // Don't auto-navigate yet, just show empty
+                }
+                
+                if (pendingCoaches.length === 0 && data.page > 1) {
                     fetchCoaches(data.page - 1);
                 }
             } else {

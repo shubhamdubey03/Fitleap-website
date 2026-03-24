@@ -71,6 +71,11 @@ const SubscriptionPlanTable = () => {
         e.preventDefault();
         const token = localStorage.getItem('adminToken');
 
+        if (formData.price < 0 || formData.duration_days < 0) {
+            alert('Price and Duration cannot be negative');
+            return;
+        }
+
         // Convert features string back to array
         const payload = {
             ...formData,
@@ -241,11 +246,11 @@ const SubscriptionPlanTable = () => {
                             </div>
                             <div className="form-group">
                                 <label>Price (₹)</label>
-                                <input type="number" name="price" value={formData.price} onChange={handleInputChange} required />
+                                <input type="number" name="price" value={formData.price} onChange={handleInputChange} min="0" required />
                             </div>
                             <div className="form-group">
                                 <label>Duration (Days)</label>
-                                <input type="number" name="duration_days" value={formData.duration_days} onChange={handleInputChange} required />
+                                <input type="number" name="duration_days" value={formData.duration_days} onChange={handleInputChange} min="0" required />
                             </div>
                             <div className="form-group">
                                 <label>Features (comma separated)</label>

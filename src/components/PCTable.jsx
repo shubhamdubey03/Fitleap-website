@@ -134,7 +134,7 @@ const PCTable = () => {
                                         </span>
                                     </td>
                                     <td>
-                                        <button className="delete-btn" onClick={() => handleDelete(item.id)} style={{ backgroundColor: '#e53935', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}>Delete</button>
+                                        <button className="delete-btn" onClick={() => handleDelete(item.id)}>Delete</button>
                                     </td>
                                 </tr>
                             ))
@@ -194,7 +194,7 @@ const PCTable = () => {
                             </div>
                             <div className="modal-actions" style={{ marginTop: '20px', textAlign: 'right' }}>
                                 <button type="button" onClick={() => setShowModal(false)} className="cancel-btn">Cancel</button>
-                                <button type="submit" className="submit-btn" style={{ backgroundColor: '#4834d4', color: 'white', marginLeft: '10px' }}>Add Entry</button>
+                                <button type="submit" className="submit-btn" style={{ marginLeft: '10px' }}>Add Entry</button>
                             </div>
                         </form>
                     </div>

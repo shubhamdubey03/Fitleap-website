@@ -61,7 +61,7 @@ const NotificationForm = () => {
                             onChange={handleInputChange}
                             placeholder="e.g. New Feature Available!"
                             required
-                            style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '16px' }}
+                            style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '16px', backgroundColor: '#fff', color: '#333' }}
                         />
                     </div>
                     <div className="form-group" style={{ marginBottom: '20px' }}>
@@ -72,7 +72,7 @@ const NotificationForm = () => {
                             onChange={handleInputChange}
                             placeholder="Write your message here..."
                             required
-                            style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '16px', minHeight: '120px' }}
+                            style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '16px', minHeight: '120px', backgroundColor: '#fff', color: '#333' }}
                         />
                     </div>
 

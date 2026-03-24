@@ -26,6 +26,10 @@ const StudentRequests = () => {
                 setStudents(data.data || []);
                 setTotalPages(data.totalPages || 1);
                 setCurrentPage(data.page || 1);
+                // If current page is empty and not page 1, go to previous page
+                if ((data.data || []).length === 0 && data.page > 1) {
+                    fetchStudents(data.page - 1);
+                }
             } else {
                 console.error('Failed to fetch students:', data.message);
             }
@@ -62,8 +66,8 @@ const StudentRequests = () => {
 
             if (response.ok) {
                 alert('Student Approved Successfully!');
-                // Remove from list
-                setStudents(students.filter(s => s.id !== studentId));
+                // Re-fetch to update list and pagination
+                fetchStudents(currentPage);
             } else {
                 alert('Failed to approve: ' + data.message);
             }
@@ -91,8 +95,8 @@ const StudentRequests = () => {
 
             if (response.ok) {
                 alert('Student Request Rejected Successfully!');
-                // Remove from list
-                setStudents(students.filter(s => s.id !== studentId));
+                // Re-fetch to update list and pagination
+                fetchStudents(currentPage);
             } else {
                 alert('Failed to reject: ' + data.message);
             }

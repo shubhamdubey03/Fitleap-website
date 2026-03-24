@@ -14,7 +14,7 @@ const ClientTable = () => {
         try {
             setLoading(true);
             const token = localStorage.getItem('adminToken');
-            const url = `${API_URL}/admin/coaches?page=${page}&limit=${limit}${search ? `&search=${encodeURIComponent(search)}` : ''}`;
+            const url = `${API_URL}/admin/coaches?page=${page}&limit=${limit}&is_approved=true${search ? `&search=${encodeURIComponent(search)}` : ''}`;
             const response = await fetch(url, {
                 headers: {
                     'Authorization': `Bearer ${token}`

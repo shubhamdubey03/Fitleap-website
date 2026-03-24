@@ -116,7 +116,7 @@ const WorkoutCategoryTable = () => {
                             </div>
                             <div className="modal-actions">
                                 <button type="button" onClick={() => setShowModal(false)} className="cancel-btn">Cancel</button>
-                                <button type="submit" className="submit-btn" style={{ backgroundColor: '#4CAF50', color: 'white', marginLeft: '10px' }}>Add Category</button>
+                                <button type="submit" className="submit-btn" style={{ marginLeft: '10px' }}>Add Category</button>
                             </div>
                         </form>
                     </div>

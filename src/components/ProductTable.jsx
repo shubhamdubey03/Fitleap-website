@@ -191,8 +191,8 @@ const ProductTable = () => {
 
                                     <td>
                                         <div style={{ display: 'flex', gap: '5px' }}>
-                                            <button className="edit-btn" onClick={() => handleEdit(product)} style={{ backgroundColor: '#2196F3', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}>Edit</button>
-                                            <button className="delete-btn" onClick={() => handleDelete(product.id)} style={{ backgroundColor: '#e53935', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}>Delete</button>
+                                            <button className="edit-btn" onClick={() => handleEdit(product)}>Edit</button>
+                                            <button className="delete-btn" onClick={() => handleDelete(product.id)}>Delete</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -241,7 +241,7 @@ const ProductTable = () => {
                             </div>
                             <div className="modal-actions">
                                 <button type="button" onClick={() => setShowModal(false)} className="cancel-btn">Cancel</button>
-                                <button type="submit" className="submit-btn" style={{ backgroundColor: '#4CAF50', color: 'white', marginLeft: '10px' }}>{isEditing ? 'Update Product' : 'Add Product'}</button>
+                                <button type="submit" className="submit-btn" style={{ marginLeft: '10px' }}>{isEditing ? 'Update Product' : 'Add Product'}</button>
                             </div>
                         </form>
                     </div>

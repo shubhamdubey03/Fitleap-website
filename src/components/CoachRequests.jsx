@@ -14,7 +14,7 @@ const CoachRequests = () => {
         try {
             setLoading(true);
             const token = localStorage.getItem('adminToken');
-            const response = await fetch(`${API_URL}/admin/coaches?page=${page}&limit=${limit}`, {
+            const response = await fetch(`${API_URL}/admin/coaches?page=${page}&limit=${limit}&is_approved=false`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -22,12 +22,13 @@ const CoachRequests = () => {
             const data = await response.json();
             if (response.ok) {
                 console.log('Fetched Coaches Data:', data);
-                // Filter to show only pending coaches
-                const coachesArray = data.data || [];
-                const pendingCoaches = coachesArray.filter(coach => !coach.is_approved);
-                setCoaches(pendingCoaches);
+                setCoaches(data.data || []);
                 setTotalPages(data.totalPages || 1);
                 setCurrentPage(data.page || 1);
+                // If current page is empty and not page 1, go to previous page
+                if ((data.data || []).length === 0 && data.page > 1) {
+                    fetchCoaches(data.page - 1);
+                }
             } else {
                 console.error('Failed to fetch coaches:', data.message);
             }
@@ -54,18 +55,18 @@ const CoachRequests = () => {
         setApprovalLoading(coachId);
         try {
             const token = localStorage.getItem('adminToken');
-            const response = await fetch(`${API_URL} /admin/approve - coach / ${coachId} `, {
+            const response = await fetch(`${API_URL}/admin/approve-coach/${coachId}`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `Bearer ${token} `
+                    'Authorization': `Bearer ${token}`
                 }
             });
             const data = await response.json();
 
             if (response.ok) {
                 alert('Coach Approved Successfully!');
-                // Remove from list
-                setCoaches(coaches.filter(c => c.id !== coachId));
+                // Re-fetch to update list and pagination
+                fetchCoaches(currentPage);
             } else {
                 alert('Failed to approve: ' + data.message);
             }
@@ -83,18 +84,18 @@ const CoachRequests = () => {
         setApprovalLoading(coachId);
         try {
             const token = localStorage.getItem('adminToken');
-            const response = await fetch(`${API_URL} /admin/reject - coach / ${coachId} `, {
+            const response = await fetch(`${API_URL}/admin/reject-coach/${coachId}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${token} `
+                    'Authorization': `Bearer ${token}`
                 }
             });
             const data = await response.json();
 
             if (response.ok) {
                 alert('Coach Request Rejected Successfully!');
-                // Remove from list
-                setCoaches(coaches.filter(c => c.id !== coachId));
+                // Re-fetch to update list and pagination
+                fetchCoaches(currentPage);
             } else {
                 alert('Failed to reject: ' + data.message);
             }
@@ -116,10 +117,10 @@ const CoachRequests = () => {
     return (
         <div className="content-section">
             <div className="section-header">
-                <h2>Registered Coaches</h2>
+                <h2>Pending Coach Requests</h2>
             </div>
             {coaches.length === 0 ? (
-                <div className="empty-state">No coaches found</div>
+                <div className="empty-state">No pending coach requests found</div>
             ) : (
                 <div className="table-container">
                     <table>

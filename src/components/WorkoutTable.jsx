@@ -132,7 +132,7 @@ const WorkoutTable = () => {
                                     <td>{workout.time}</td>
                                     <td>{getCategoryName(workout.id)}</td>
                                     <td>
-                                        <button className="delete-btn" onClick={() => handleDelete(workout.id)} style={{ backgroundColor: '#e53935', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}>Delete</button>
+                                        <button className="delete-btn" onClick={() => handleDelete(workout.id)}>Delete</button>
                                     </td>
                                 </tr>
                             ))
@@ -169,7 +169,7 @@ const WorkoutTable = () => {
                             </div>
                             <div className="modal-actions">
                                 <button type="button" onClick={() => setShowModal(false)} className="cancel-btn">Cancel</button>
-                                <button type="submit" className="submit-btn" style={{ backgroundColor: '#4CAF50', color: 'white', marginLeft: '10px' }}>Add Workout</button>
+                                <button type="submit" className="submit-btn" style={{ marginLeft: '10px' }}>Add Workout</button>
                             </div>
                         </form>
                     </div>

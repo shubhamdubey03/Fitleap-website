@@ -5,6 +5,8 @@ const WorkoutCategoryTable = () => {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [currentCategoryId, setCurrentCategoryId] = useState(null);
     const [formData, setFormData] = useState({
         name: '',
         image: ''
@@ -39,12 +41,48 @@ const WorkoutCategoryTable = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const handleEdit = (category) => {
+        setFormData({
+            name: category.name,
+            image: category.image || ''
+        });
+        setCurrentCategoryId(category.id);
+        setIsEditing(true);
+        setShowModal(true);
+    };
+
+    const handleDelete = async (id) => {
+        if (!window.confirm('Are you sure you want to delete this category?')) return;
+
+        try {
+            const token = localStorage.getItem('adminToken');
+            const response = await fetch(`${CATEGORY_API}/delete/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const result = await response.json();
+            if (response.ok) {
+                alert('Category deleted successfully');
+                fetchCategories();
+            } else {
+                alert('Failed to delete category: ' + result.error);
+            }
+        } catch (error) {
+            console.error('Error deleting category:', error);
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const token = localStorage.getItem('adminToken');
-            const response = await fetch(`${CATEGORY_API}/create`, {
-                method: 'POST',
+            const url = isEditing 
+                ? `${CATEGORY_API}/update/${currentCategoryId}` 
+                : `${CATEGORY_API}/create`;
+            const method = isEditing ? 'PUT' : 'POST';
+
+            const response = await fetch(url, {
+                method: method,
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
@@ -53,15 +91,17 @@ const WorkoutCategoryTable = () => {
             });
             const result = await response.json();
             if (response.ok) {
-                alert('Category added successfully');
+                alert(`Category ${isEditing ? 'updated' : 'added'} successfully`);
                 setShowModal(false);
                 setFormData({ name: '', image: '' });
+                setIsEditing(false);
+                setCurrentCategoryId(null);
                 fetchCategories();
             } else {
-                alert('Failed to add category: ' + result.error);
+                alert(`Failed to ${isEditing ? 'update' : 'add'} category: ` + result.error);
             }
         } catch (error) {
-            console.error('Error adding category:', error);
+            console.error(`Error ${isEditing ? 'updating' : 'adding'} category:`, error);
         }
     };
 
@@ -71,7 +111,11 @@ const WorkoutCategoryTable = () => {
         <div className="content-section">
             <div className="section-header">
                 <h2>Workout Categories</h2>
-                <button className="add-btn" onClick={() => setShowModal(true)}>+ Add Category</button>
+                <button className="add-btn" onClick={() => {
+                    setIsEditing(false);
+                    setFormData({ name: '', image: '' });
+                    setShowModal(true);
+                }}>+ Add Category</button>
             </div>
 
             <div className="table-container">
@@ -81,11 +125,12 @@ const WorkoutCategoryTable = () => {
                             <th>Image</th>
                             <th>Name</th>
                             <th>Created At</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {categories.length === 0 ? (
-                            <tr><td colSpan="3" style={{ textAlign: 'center' }}>No categories found</td></tr>
+                            <tr><td colSpan="4" style={{ textAlign: 'center' }}>No categories found</td></tr>
                         ) : (
                             categories.map((category) => (
                                 <tr key={category.id}>
@@ -94,6 +139,12 @@ const WorkoutCategoryTable = () => {
                                     </td>
                                     <td>{category.name}</td>
                                     <td>{new Date(category.created_at).toLocaleDateString()}</td>
+                                    <td>
+                                        <div className="action-btns">
+                                            <button className="edit-btn-small" onClick={() => handleEdit(category)}>Edit</button>
+                                            <button className="delete-btn-small" onClick={() => handleDelete(category.id)}>Delete</button>
+                                        </div>
+                                    </td>
                                 </tr>
                             ))
                         )}
@@ -104,7 +155,7 @@ const WorkoutCategoryTable = () => {
             {showModal && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                        <h3>Add New Category</h3>
+                        <h3>{isEditing ? 'Edit Category' : 'Add New Category'}</h3>
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
                                 <label>Category Name</label>
@@ -116,7 +167,9 @@ const WorkoutCategoryTable = () => {
                             </div>
                             <div className="modal-actions">
                                 <button type="button" onClick={() => setShowModal(false)} className="cancel-btn">Cancel</button>
-                                <button type="submit" className="submit-btn" style={{ marginLeft: '10px' }}>Add Category</button>
+                                <button type="submit" className="submit-btn" style={{ marginLeft: '10px' }}>
+                                    {isEditing ? 'Update Category' : 'Add Category'}
+                                </button>
                             </div>
                         </form>
                     </div>

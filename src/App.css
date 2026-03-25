@@ -279,6 +279,48 @@
   box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
 }
 
+.action-btns {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.edit-btn-small {
+  background: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  cursor: pointer;
+}
+
+.edit-btn-small:hover {
+  background: #3b82f6;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.delete-btn-small {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  cursor: pointer;
+}
+
+.delete-btn-small:hover {
+  background: #ef4444;
+  color: white;
+  transform: translateY(-1px);
+}
+
+
 .btn-icon {
   background: transparent;
   padding: 0.4rem;

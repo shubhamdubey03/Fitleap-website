@@ -10,20 +10,20 @@
 
 .login-box {
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
   background-color: var(--bg-card, #1e293b);
-  padding: 40px;
-  border-radius: 16px;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  padding: 50px;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.5);
   text-align: center;
   border: 1px solid var(--border-color, #334155);
 }
 
 .login-box h2 {
-  margin-bottom: 24px;
+  margin-bottom: 32px;
   color: var(--text-main, #fff);
-  font-size: 1.8rem;
-  font-weight: 700;
+  font-size: 2.2rem;
+  font-weight: 800;
 }
 
 .form-group {
@@ -33,19 +33,19 @@
 
 .form-group label {
   display: block;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   color: var(--text-muted, #94a3b8);
-  margin-bottom: 8px;
-  font-weight: 500;
+  margin-bottom: 12px;
+  font-weight: 600;
 }
 
 .form-group input {
   width: 100%;
-  padding: 12px;
+  padding: 16px;
   background-color: rgba(0, 0, 0, 0.2);
   border: 1px solid var(--border-color, #334155);
-  border-radius: 8px;
-  font-size: 1rem;
+  border-radius: 10px;
+  font-size: 1.1rem;
   color: var(--text-main, #fff);
   outline: none;
   transition: all 0.2s;
@@ -58,16 +58,16 @@
 
 .login-btn {
   width: 100%;
-  padding: 12px;
+  padding: 16px;
   background-color: var(--primary, #6366f1);
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: 10px;
+  font-size: 1.15rem;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 .login-btn:hover {

@@ -66,6 +66,12 @@ const PCTable = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (formData.duration_days < 0 || formData.reward_coins < 0) {
+            alert('Duration and Reward Coins cannot be negative');
+            return;
+        }
+
         try {
             const token = localStorage.getItem('adminToken');
             const response = await axios.post(`${PC_API}/create`, formData, {
@@ -172,13 +178,13 @@ const PCTable = () => {
                                 </div>
                                 <div className="form-group" style={{ flex: 1 }}>
                                     <label>Duration (Days)</label>
-                                    <input type="number" name="duration_days" value={formData.duration_days} onChange={handleInputChange} required />
+                                    <input type="number" name="duration_days" value={formData.duration_days} onChange={handleInputChange} min="0" required />
                                 </div>
                             </div>
                             <div className="form-row" style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
                                 <div className="form-group" style={{ flex: 1 }}>
                                     <label>Reward Coins</label>
-                                    <input type="number" name="reward_coins" value={formData.reward_coins} onChange={handleInputChange} required />
+                                    <input type="number" name="reward_coins" value={formData.reward_coins} onChange={handleInputChange} min="0" required />
                                 </div>
                                 <div className="form-group" style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px', marginTop: '20px' }}>
                                     <input

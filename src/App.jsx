@@ -17,6 +17,7 @@ import NotificationForm from './components/NotificationForm';
 import StudentRequests from './components/StudentRequests';
 import PCTable from './components/PCTable';
 import PCSubscriptionPlanTable from './components/PCSubscriptionPlanTable';
+import FreeDietForm from './components/FreeDietForm';
 
 
 
@@ -56,6 +57,8 @@ function Dashboard({ handleLogout }) {
         return <PCSubscriptionPlanTable />;
       case 'notifications':
         return <NotificationForm />;
+      case 'free_diets':
+        return <FreeDietForm />;
 
 
 

@@ -15,6 +15,7 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, onClose }) => {
         { id: 'subscription_plans', label: 'Subscriptions', icon: '💳' },
         { id: 'pc_subscription_plans', label: 'Program Subscriptions', icon: '📜' },
         { id: 'notifications', label: 'Notifications', icon: '📢' },
+        { id: 'free_diets', label: 'Free Diets', icon: '🥗' },
     ];
 
 
